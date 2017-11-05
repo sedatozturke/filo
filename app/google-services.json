@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "909052961353",
+    "firebase_url": "https://fordfiloyonetimi.firebaseio.com",
+    "project_id": "fordfiloyonetimi",
+    "storage_bucket": "fordfiloyonetimi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909052961353:android:e7c09e9e29e60a9d",
+        "android_client_info": {
+          "package_name": "com.openxcplatform.openxcstarter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909052961353-h7vc2l7m4vpts7utb2m8pe6jeq8jsecu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.openxcplatform.openxcstarter",
+            "certificate_hash": "db31a5fe02a7a6293dfafc50dede9f9a3403a21a"
+          }
+        },
+        {
+          "client_id": "909052961353-b3oav1eh0bipic72tdv5b3opmspggb3g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsxIOCIVI_gn8PNBh3GHMjlMxXwHF83sQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909052961353-b3oav1eh0bipic72tdv5b3opmspggb3g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
