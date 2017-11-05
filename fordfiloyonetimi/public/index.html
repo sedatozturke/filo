@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to Firebase Hosting</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <!-- update the version number as needed -->
+  <script defer src="/__/firebase/4.6.1/firebase-app.js"></script>
+  <!-- include only the Firebase features as you need -->
+  <script defer src="/__/firebase/4.6.1/firebase-auth.js"></script>
+  <script defer src="/__/firebase/4.6.1/firebase-database.js"></script>
+  <script defer src="/__/firebase/4.6.1/firebase-messaging.js"></script>
+  <script defer src="/__/firebase/4.6.1/firebase-storage.js"></script>
+  <!-- initialize the SDK after all desired features are loaded -->
+  <script defer src="/__/firebase/init.js"></script>
+
+</head>
+
+<body style="background: #EEEEEE">
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">Filo Yönetimi</span>
+      </div>
+      <!-- Tabs -->
+      <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+        <a href="#scroll-tab-1" class="mdl-layout__tab is-active">FİLO GÖRÜNTÜLEME</a>
+        <a href="#scroll-tab-2" class="mdl-layout__tab">ARAÇ DURUMU</a>
+        <a href="#scroll-tab-3" class="mdl-layout__tab">SÜRÜCÜ ANALİZİ</a>
+      </div>
+    </header>
+    <main class="mdl-layout__content">
+      <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+        <div class="page-content">
+          <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="margin: 0 auto; width:90%; margin-top: 15px; margin-bottom: 15px; height: 400px;">
+            <div id="map" style="width: 100%; height: 100%;">
+
+            </div>
+          </div>
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="margin: 0 auto; margin-bottom: 15px; width: 90%;">
+            <thead>
+              <tr>
+                <th class="mdl-data-table__cell--non-numeric">Araç Plakası</th>
+                <th class="mdl-data-table__cell--non-numeric">Araç Modeli</th>
+                <th class="mdl-data-table__cell--non-numeric">Sürücü</th>
+                <th>Yakıt(%)</th>
+                <th>Hız</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">34 SFU 12</td>
+                <td class="mdl-data-table__cell--non-numeric">Ford Focus</td>
+                <td class="mdl-data-table__cell--non-numeric">Sedat Öztürk</td>
+                <td>25</td>
+                <td>$2.90</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+        <div class="page-content">
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="margin: 0 auto; margin-top: 15px; width: 90%;">
+            <tbody id="table-content">
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+                  // // The Firebase SDK is initialized and available here!
+                  //
+                  // firebase.auth().onAuthStateChanged(user => { });
+                  firebase.database().ref('/araclar/').on('value', snapshot => {
+                    var child = Object.keys(snapshot.val());
+                    console.log(snapshot.val());
+                    for (i = 0; i < child.length; i++) {
+                      var childindex = child[i];
+                      var plaka = snapshot.child(childindex).val().Plaka;
+                      var km = snapshot.child(childindex).val().km;
+                      var model = snapshot.child(childindex).val().model;
+                      var yil = snapshot.child(childindex).val().yil;
+                      var foto = snapshot.child(childindex).val().foto;
+                      renderArac(i, foto, model, yil, plaka, km);
+                    }
+
+
+                  });
+                });
+                function renderArac(id, src, model, yil, plaka, km) {
+                  var content = document.getElementById('table-content');
+                  var element = document.createElement('tr');
+                  element.style.height = "170px";
+                  content.appendChild(element);
+                  var resim = document.createElement('td');
+                  resim.style.textAlign = "center";
+                  resim.style.padding = 0;
+                  var resimkendi = document.createElement('img');
+                  resimkendi.src = src;
+                  resimkendi.style.height = "120px";
+                  resimkendi.style.width = "255px";
+                  resimkendi.style.margin = 0;
+                  resim.appendChild(resimkendi);
+                  element.appendChild(resim);
+                  var baslik = document.createElement('td');
+                  baslik.className = "mdl-data-table__cell--non-numeric";
+                  baslik.style.fontSize = "14px";
+                  baslik.innerText = "Araç Modeli\nYılı\nPlakası\nKilometresi";
+                  element.appendChild(baslik);
+                  var baslika = document.createElement('td');
+                  baslika.className = "mdl-data-table__cell--non-numeric";
+                  baslika.style.fontSize = "14px";
+                  baslika.innerText = model + "\n" + yil + "\n" + plaka + "\n" + km;
+                  element.appendChild(baslika);
+                  var baslikb = document.createElement('td');
+                  baslikb.style.minWidth = "20px";
+                  element.appendChild(baslikb);
+                  var butontd = document.createElement('td');
+                  var buton = document.createElement('button');
+                  buton.className = "mdl-button mdl-js-button mdl-button--raised mdl-button--colored";
+                  buton.innerText = "RAPORU GÖRÜNTÜLE";
+                  buton.id = "show-dialog" + id;
+                  butontd.appendChild(buton);
+                  element.appendChild(butontd);
+                  var dialog = document.querySelector('dialog');
+                  var showDialogButton = document.querySelector('#show-dialog' + id);
+
+                  showDialogButton.addEventListener('click', function () {
+                    var title = document.getElementById("titlea");
+                    title.innerText = plaka;
+                    var foto = document.getElementById("imga");
+                    foto.src = src;
+                    foto.style.height = "60px";
+                    foto.style.width = "127px";
+                    dialog.showModal();
+                  });
+                  dialog.querySelector('.close').addEventListener('click', function () {
+                    dialog.close();
+                  });
+                }
+
+
+              </script>
+
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+        <div class="page-content">
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="margin: 0 auto; margin-top: 15px; width: 90%;">
+            <tbody id="table-contenta">
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+                  // // The Firebase SDK is initialized and available here!
+                  //
+                  // firebase.auth().onAuthStateChanged(user => { });
+                  firebase.database().ref('/suruculer/').on('value', snapshot => {
+                    var child = Object.keys(snapshot.val());
+                    console.log(snapshot.val());
+                    for (i = 0; i < child.length; i++) {
+                      var childindex = child[i];
+                      var ad = snapshot.child(childindex).val().ad;
+                      var soyad = snapshot.child(childindex).val().soyad;
+                      var src = snapshot.child(childindex).val().foto;
+                      renderSurucu(i, src, ad, soyad);
+                    }
+
+
+                  });
+                });
+                function renderSurucu(id, src, ad, soyad) {
+                  var content = document.getElementById('table-contenta');
+                  var element = document.createElement('tr');
+                  element.style.height = "170px";
+                  content.appendChild(element);
+                  var resim = document.createElement('td');
+                  resim.style.textAlign = "center";
+                  resim.style.padding = 0;
+                  var resimkendi = document.createElement('img');
+                  resimkendi.src = src;
+                  resimkendi.style.height = "160px";
+                  resimkendi.style.width = "124px";
+                  resimkendi.style.margin = 0;
+                  resim.appendChild(resimkendi);
+                  element.appendChild(resim);
+                  var baslik = document.createElement('td');
+                  baslik.className = "mdl-data-table__cell--non-numeric";
+                  baslik.style.fontSize = "14px";
+                  baslik.innerText = "Ad\nSoyad";
+                  element.appendChild(baslik);
+                  var baslika = document.createElement('td');
+                  baslika.className = "mdl-data-table__cell--non-numeric";
+                  baslika.style.fontSize = "14px";
+                  baslika.innerText = ad + "\n" + soyad;
+                  element.appendChild(baslika);
+                  var baslikb = document.createElement('td');
+                  baslikb.style.minWidth = "20px";
+                  element.appendChild(baslikb);
+                  var butontd = document.createElement('td');
+                  var buton = document.createElement('button');
+                  buton.className = "mdl-button mdl-js-button mdl-button--raised mdl-button--colored";
+                  buton.innerText = "RAPORU GÖRÜNTÜLE";
+                  buton.id = "show-dialoga" + id;
+                  butontd.appendChild(buton);
+                  element.appendChild(butontd);
+                  var dialog = document.querySelector('dialog');
+                  var showDialogButtona = document.querySelector('#show-dialoga' + id);
+
+                  showDialogButtona.addEventListener('click', function () {
+                    var title = document.getElementById("titlea");
+                    title.innerText = ad + " " + soyad;
+                    var foto = document.getElementById("imga");
+                    foto.src = src;
+                    foto.style.height = "160px";
+                    foto.style.width = "124px";
+                    dialog.showModal();
+
+                  });
+                  dialog.querySelector('.close').addEventListener('click', function () {
+                    dialog.close();
+                  });
+                }
+
+
+              </script>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+  <dialog class="mdl-dialog" style="margin: 0 auto; height: 500px; width: 90%; background: #EEEEEE;">
+    <h4 class="mdl-dialog__title" id="titlea"></h4>
+    <div class="mdl-dialog__content" style="height: 75%; padding-top: 0px; padding-bottom: 15px; padding-left: 14px; padding-right: 0px;">
+      <div class="mdl-grid" style="padding-right: 0px; padding-left: 0px;">
+        <div class="mdl-cell mdl-cell--2-col mdl-shadow--2dp" style="height: 170px; background: #fff; display: flex;
+          flex-direction: column;
+          justify-content: center;">
+          <img id="imga" src="surucu.jpg" style="height: 160px; width: 124px; margin: 0;">
+        </div>
+        <div class="mdl-cell mdl-cell--5-col mdl-shadow--2dp" style="height: 350px; background: #fff;">4</div>
+        <div class="mdl-cell mdl-cell--5-col mdl-shadow--2dp" style="height: 350px; background: #fff; margin-right: 0px;">4</div>
+      </div>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button mdl-js-button mdl-button--primary close">Kapat</button>
+    </div>
+  </dialog>
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_FKGcma4lDy9mhqFWLq2HqLXEIWRuxPQ&callback=initMap">
+  </script>
+  <script>
+                    var position;
+                    document.addEventListener('DOMContentLoaded', function () {
+                      // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+                      // // The Firebase SDK is initialized and available here!
+                      //
+                      // firebase.auth().onAuthStateChanged(user => { });
+                      firebase.database().ref('/araclar/').on('value', snapshot => {
+                        var child = Object.keys(snapshot.val());
+                        /*for (i = 0; i < child.length; i++) {
+                          var childindex = child[i];
+                          position = {
+                            lat: snapshot.child(childindex).val().lat,
+                            lng: snapshot.child(childindex).val().lng
+                          }*/
+
+                        var childindex = child[0];
+                        var lat = snapshot.child(childindex).val().lat;
+                        var lng = snapshot.child(childindex).val().lng;
+                        updatePosition(lat, lng);
+
+                      });
+                      // firebase.messaging().requestPermission().then(() => { });
+                      // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+                      //
+                      // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+                    });
+  </script>
+  <script>
+                    var myLatlng;
+                    var map;
+                    var infowindow;
+                    var latitude;
+                    var longtitude;
+                    var marker;
+                    var markera = "https://firebasestorage.googleapis.com/v0/b/fordfiloyonetimi.appspot.com/o/marker.png?alt=media&token=f1a89f58-10e5-45cf-b07b-eb496437b834";
+                    function initMap() {
+                      map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 7,
+                        center: { lat: 26, lng: 45 }
+                      });
+                      marker = new google.maps.Marker({
+                        position: { lat: 26, lng: 45 },
+                        map: map,
+                        icon: markera
+                      });
+                    }
+                    function updatePosition(latitude, longtitude) {
+                      myLatlng = new google.maps.LatLng(latitude, longtitude);
+                      marker.setPosition(myLatlng);
+                      map.setCenter(myLatlng);
+                    }
+
+  </script>
+</body>
+
+</html>
